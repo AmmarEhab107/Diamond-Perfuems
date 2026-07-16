@@ -182,6 +182,14 @@
     <script>
         let cart = [];
         const apiUrl = 'https://sheetdb.io/api/v1/gazn7tynl1f8b';
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyl1S6AGB0Ww99lzC3Usgi_D7dWirrz2qd3z5tju85fiiEVMhpHHxQKBul-m7ZdZM012Q/exec';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if(localStorage.getItem('custName')) document.getElementById('cust-name').value = localStorage.getItem('custName');
+            if(localStorage.getItem('custPhone')) document.getElementById('cust-phone').value = localStorage.getItem('custPhone');
+            if(localStorage.getItem('custAddr')) document.getElementById('cust-address').value = localStorage.getItem('custAddr');
+        });
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
@@ -218,12 +226,21 @@
             let phone = document.getElementById('cust-phone').value;
             let addr = document.getElementById('cust-address').value;
             if(!name || !phone || !addr) { alert("من فضلك أكمل جميع البيانات!"); return; }
+            localStorage.setItem('custName', name);
+            localStorage.setItem('custPhone', phone);
+            localStorage.setItem('custAddr', addr);
             let total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
-            let msg = `طلب جديد من المتجر:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالعنوان: ${addr}%0A%0Aالطلبات:%0A`;
-            cart.forEach(i => msg += `- ${i.name} (${i.price} ج)%0A`);
-            msg += `%0Aالإجمالي: ${total} جنيه`;
+            let orderDetails = cart.map(i => i.name).join(', ');
+            fetch(scriptUrl, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({name, phone, address: addr, order: orderDetails, total})
+            });
+            let msg = `طلب جديد:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالعنوان: ${addr}%0Aالطلبات: ${orderDetails}%0Aالإجمالي: ${total} جنيه`;
             window.open(`https://wa.me/201115489554?text=${msg}`, '_blank');
             document.getElementById('checkout-modal').style.display = 'none';
+            alert("تم إرسال طلبك بنجاح!");
         }
         document.getElementById('open-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.add('active'));
         document.getElementById('close-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.remove('active'));
