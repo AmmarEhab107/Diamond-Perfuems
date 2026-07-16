@@ -1,39 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DDNTPC0KP"></script>
-    <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-2DDNTPC0KP');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diamonds Perfumes | متجر العطور الفاخرة</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --bg-color: #090909; --gold: #C7A34B; --white: #FFFFFF; --dark-gray: #151515; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-color); color: var(--white); font-family: 'Cairo', sans-serif; }
 
-        /* اللمسة السحرية: الـ Loader */
-        #loader { position: fixed; inset: 0; background: var(--bg-color); display: flex; justify-content: center; align-items: center; z-index: 10000; transition: 1s; }
+    <style>
+        /* تعريف الألوان الأساسية */
+        :root {
+            --bg-color: #090909;
+            --gold: #C7A34B;
+            --white: #FFFFFF;
+            --dark-gray: #151515;
+            --font-heading: 'Tajawal', sans-serif;
+            --font-body: 'Cairo', sans-serif;
+        }
+
+        /* تنسيقات عامة */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--white); font-family: var(--font-body); overflow-x: hidden; }
+
+        /* الأنيميشن السحري للبطاقات */
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
         
-        /* كروت المنتجات المرعبة */
         .product-card { 
             background: rgba(20, 20, 20, 0.8); 
             backdrop-filter: blur(10px); 
             border: 1px solid #333; 
             padding: 25px; 
             border-radius: 20px; 
-            transition: 0.5s; 
-            position: relative;
-            overflow: hidden;
+            transition: all 0.5s ease; 
+            animation: float 4s infinite ease-in-out;
+            text-align: center;
         }
         .product-card:hover { 
             border-color: var(--gold); 
             box-shadow: 0 0 30px rgba(199, 163, 75, 0.2); 
-            transform: translateY(-15px);
+            transform: translateY(-15px) scale(1.02);
         }
 
-        /* الـ Badge بتاع السلة */
+        /* عداد السلة البروفيشنال */
         .cart-badge { 
             position: absolute; top: -10px; right: -10px; 
             background: var(--gold); color: black; border-radius: 50%; 
@@ -47,93 +57,96 @@
         .btn-gold { 
             background: transparent; color: var(--gold); border: 1px solid var(--gold); 
             padding: 12px 30px; cursor: pointer; transition: 0.4s; border-radius: 50px;
+            font-weight: bold; font-family: var(--font-heading);
         }
         .btn-gold:hover { background: var(--gold); color: black; box-shadow: 0 0 20px var(--gold); }
         .added { background: #25d366 !important; border-color: #25d366 !important; color: white !important; }
 
-        /* السايد بار والمودال */
-        .cart-sidebar { position: fixed; top: 0; right: -100%; width: 350px; height: 100vh; background: #111; z-index: 2000; padding: 30px; transition: 0.5s; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
+        /* تنسيق السايد بار */
+        .cart-sidebar { 
+            position: fixed; top: 0; right: -100%; width: 350px; height: 100vh; 
+            background: #111; z-index: 5000; padding: 30px; 
+            transition: 0.5s; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            border-left: 1px solid var(--gold);
+        }
         .cart-sidebar.active { right: 0; }
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000; justify-content: center; align-items: center; }
+        
+        /* المودال */
+        .modal-overlay { 
+            display: none; position: fixed; inset: 0; 
+            background: rgba(0,0,0,0.95); z-index: 6000; 
+            justify-content: center; align-items: center; 
+        }
+
+        /* تحسينات الناف بار */
+        nav { 
+            position: sticky; top: 0; padding: 15px 5%; display: flex; 
+            justify-content: space-between; align-items: center; 
+            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); z-index: 2000;
+        }
+        .magic-logo { filter: invert(1) grayscale(100%) contrast(150%); height: 50px; }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="loader-logo">
-            <img src="image_2.png" alt="Logo" class="magic-logo" style="width:150px;">
-        </div>
+    <div id="loader" style="position:fixed; inset:0; background:var(--bg-color); display:flex; justify-content:center; align-items:center; z-index:10000; transition:1s;">
+        <img src="image_2.png" class="magic-logo" style="width:150px; animation: pulse 2s infinite;">
     </div>
 
-    <div class="top-bar">شحن مجاني لفترة محدودة - اطلب عطرك المفضل الآن!</div>
+    <div class="top-bar" style="background:var(--gold); color:black; text-align:center; padding:8px; font-weight:bold;">
+        شحن مجاني لفترة محدودة - اطلب عطرك المفضل الآن!
+    </div>
 
     <nav>
-        <div class="nav-logo">
-            <img src="image_2.png" alt="Logo" class="magic-logo" style="height:50px;">
-        </div>
-        <ul class="nav-links">
-            <li><a href="#home">الرئيسية</a></li>
-            <li><a href="#consult">الاستشارة</a></li>
-            <li><a href="#shop">المجموعة الماسية</a></li>
-            <li><a href="#reviews">الآراء</a></li>
-        </ul>
-        <div class="nav-left" style="position:relative; cursor:pointer;" id="open-cart">
-            <i class="fas fa-shopping-bag" style="font-size:24px;"></i>
+        <div class="nav-logo"><img src="image_2.png" class="magic-logo"></div>
+        <div style="position:relative; cursor:pointer;" id="open-cart">
+            <i class="fas fa-shopping-bag" style="font-size:24px; color:white;"></i>
             <div id="cart-badge" class="cart-badge" style="display:none;">0</div>
         </div>
     </nav>
 
-    <section id="home" class="hero" style="padding: 100px 5%; text-align: center;">
-        <div class="hero-content">
-            <h1 style="font-size: 3.5rem; margin-bottom: 20px;">أهلاً بك في عالم التألق.</h1>
-            <p style="font-size: 1.2rem; color: #aaa; margin-bottom: 40px;">اكتشف مجموعتنا الحصرية من العطور الفاخرة.</p>
-            <a href="#shop" class="btn btn-gold">اكتشف عروضنا</a>
+    <section id="home" style="height:80vh; display:flex; align-items:center; justify-content:center; text-align:center;">
+        <div style="max-width:800px;">
+            <h1 style="font-size:3.5rem; margin-bottom:20px; color:var(--white);">أهلاً بك في عالم التألق.</h1>
+            <p style="font-size:1.2rem; color:#aaa; margin-bottom:30px;">اكتشف مجموعتنا الحصرية من العطور الفاخرة.</p>
+            <a href="#shop" class="btn-gold">اكتشف عروضنا</a>
         </div>
     </section>
 
-    <section id="consult" class="consultation-section" style="padding: 80px 5%;">
-        <div class="consultation-box" style="text-align:center; padding: 40px; border: 1px solid var(--gold); border-radius: 20px;">
-            <h2 style="color:var(--gold);">محتار في اختيار عطرك؟</h2>
-            <p style="margin: 20px 0;">تحدث مع خبير العطور الآن واحصل على ترشيح مخصص.</p>
-            <a href="https://wa.me/201055310466" class="btn btn-gold">ابدأ الاستشارة المجانية</a>
+    <section id="consult" style="padding:80px 5%;">
+        <div style="max-width:800px; margin:0 auto; padding:40px; border:1px solid var(--gold); border-radius:20px; text-align:center;">
+            <h2 style="color:var(--gold); margin-bottom:20px;">محتار في اختيار عطرك؟</h2>
+            <p style="margin-bottom:30px;">تحدث مع خبير العطور لدينا واحصل على ترشيح مخصص لك.</p>
+            <a href="https://wa.me/201055310466" target="_blank" class="btn-gold">ابدأ الاستشارة المجانية</a>
         </div>
-    </section>
-    <section id="shop" class="shop-section" style="padding: 80px 5%; background: var(--dark-gray);">
+    </section><section id="shop" style="padding: 80px 5%; background: var(--dark-gray);">
         <h2 style="text-align:center; color:var(--gold); margin-bottom:50px;">المجموعة الماسية</h2>
-        <div id="shop-container" class="product-grid">
+        <div id="shop-container" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:30px; max-width:1200px; margin:0 auto;">
             <p style="text-align:center; width:100%; color:var(--gold);">جاري استحضار أفخم العطور لك...</p>
         </div>
     </section>
 
-    <section id="reviews" style="padding: 80px 5%;">
-        <h2 style="text-align:center; margin-bottom:30px;">آراء عملائنا</h2>
-        </section>
-
-    <section id="faq" style="padding: 80px 5%; background: #090909;">
-        <h2 style="text-align:center; margin-bottom:30px;">الأسئلة الشائعة</h2>
-        </section>
-
     <footer style="background: #000; padding: 60px 5%; text-align: center;">
-        <img src="image_2.png" alt="Logo" class="magic-logo" style="width:100px; margin-bottom:20px;">
-        <h3 style="color: var(--gold); margin-bottom: 10px;">للفخامة بصمة لا تُنسى.</h3>
-        <p style="color: #666;">&copy; 2026 داياموندز للعطور. جميع الحقوق محفوظة.</p>
+        <img src="image_2.png" class="magic-logo" style="width:100px; margin-bottom:20px;">
+        <h3 style="color: var(--gold);">للفخامة بصمة لا تُنسى.</h3>
+        <p style="color: #666; margin-top:10px;">&copy; 2026 داياموندز للعطور.</p>
     </footer>
 
-    <div class="cart-sidebar" id="cart-sidebar">
-        <i class="fas fa-times" id="close-cart" style="cursor:pointer; font-size:24px; color:white;"></i>
+    <div id="cart-sidebar" class="cart-sidebar">
+        <i class="fas fa-times" id="close-cart" style="font-size:24px; cursor:pointer; color:white;"></i>
         <h2 style="margin:20px 0; color:white;">سلة المشتريات</h2>
         <div id="cart-items" style="margin: 20px 0; color:white;"></div>
         <button onclick="openCheckout()" class="btn-gold" style="width:100%;">إتمام الطلب</button>
     </div>
 
     <div id="checkout-modal" class="modal-overlay">
-        <div style="background:#151515; padding:30px; width:90%; max-width:400px; border-radius:15px; text-align:center; border:1px solid var(--gold);">
+        <div style="background:#151515; padding:30px; width:90%; max-width:400px; border-radius:20px; text-align:center; border:1px solid var(--gold);">
             <h2 style="color:var(--gold); margin-bottom:15px;">بيانات الطلب</h2>
-            <p id="total-price" style="margin:15px 0; font-size:1.2rem; color:white;"></p>
+            <p id="total-price" style="margin:15px 0; font-size:1.2rem;"></p>
             <input type="text" id="cust-name" placeholder="الاسم الكريم" style="width:100%; padding:12px; margin-bottom:10px; background:#090909; border:1px solid #333; color:white;">
             <input type="text" id="cust-phone" placeholder="رقم التليفون" style="width:100%; padding:12px; margin-bottom:10px; background:#090909; border:1px solid #333; color:white;">
             <input type="text" id="cust-address" placeholder="العنوان بالتفصيل" style="width:100%; padding:12px; margin-bottom:10px; background:#090909; border:1px solid #333; color:white;">
-            <button onclick="sendOrder()" class="btn-gold" style="width:100%; border:none; padding:12px;">تأكيد الطلب الآن</button>
+            <button onclick="sendOrder()" class="btn-gold" style="width:100%; border:none; padding:12px; margin-top:10px;">تأكيد الطلب الآن</button>
             <button onclick="document.getElementById('checkout-modal').style.display='none'" style="background:none; border:none; color:#777; margin-top:15px; cursor:pointer;">إلغاء</button>
         </div>
     </div>
@@ -151,17 +164,17 @@
                     const cleanImg = item.Image.replace(/<[^>]*>/g, '').replace(/"/g, '');
                     container.innerHTML += `
                         <div class="product-card">
-                            <img src="${cleanImg}" style="width:100%; height:200px; object-fit:contain;">
-                            <h3>${item.Name}</h3>
-                            <p class="price" style="color:var(--gold); font-weight:bold;">${item.Price} جنيه</p>
-                            <button class="btn-gold" style="width:100%; margin-top:15px;" 
-                                    onclick="addToCart('${item.Name}', ${item.Price}, this)">إضافة للسلة</button>
+                            <img src="${cleanImg}" style="width:100%; height:200px; object-fit:contain; border-radius:10px;">
+                            <h3 style="margin:15px 0 10px 0;">${item.Name}</h3>
+                            <p class="price" style="color:var(--gold); font-weight:bold; font-size:1.2rem; margin-bottom:15px;">${item.Price} جنيه</p>
+                            <button class="btn-gold" style="width:100%;" 
+                                    onclick="addToCart('${item.Name}', '${item.Price}', this)">إضافة للسلة</button>
                         </div>
                     `;
                 });
             });
 
-        // 2. دالة الإضافة للسلة مع الأنيميشن
+        // 2. دالة الإضافة للسلة مع الأنيميشن الاحترافي
         function addToCart(name, price, btn) {
             cart.push({ name, price });
             
@@ -175,7 +188,7 @@
             btn.innerText = "تمت الإضافة!";
             setTimeout(() => { btn.classList.remove('added'); btn.innerText = "إضافة للسلة"; }, 1500);
             
-            // تحديث محتوى السلة
+            // إضافة المنتج داخل السلة الجانبية
             document.getElementById('cart-items').innerHTML += `<p style="border-bottom:1px solid #333; padding:10px;">${name} - ${price} جنيه</p>`;
         }
 
@@ -191,6 +204,7 @@
             let name = document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
             let addr = document.getElementById('cust-address').value;
+            
             if(!name || !phone || !addr) { alert("من فضلك أكمل بياناتك!"); return; }
             
             let msg = `طلب جديد:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالعنوان: ${addr}%0A%0Aالطلبات:%0A`;
@@ -203,7 +217,11 @@
         // 5. تفعيل السايد بار واللوادر
         document.getElementById('open-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.add('active'));
         document.getElementById('close-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.remove('active'));
+        
+        // إخفاء شاشة التحميل بعد انتهاء التحميل
         window.onload = () => setTimeout(() => document.getElementById('loader').style.opacity = '0', 1000);
+        setTimeout(() => document.getElementById('loader').style.display = 'none', 2000);
     </script>
 </body>
 </html>
+    
