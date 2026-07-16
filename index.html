@@ -218,15 +218,16 @@
             .then(data => {
                 const container = document.getElementById('shop-container');
                 container.innerHTML = ''; 
-              container.innerHTML += `
-                <div class="product-card fade-in appear">
-                    <img src="${item.Image}" alt="${item.Name}">
-                    <h3>${item.Name}</h3>
-                    <p class="price">${item.Price} جنيه</p>
-                    <p class="notes">${item.Description}</p>
-                    <button class="btn btn-gold" style="width:100%" 
-                            onclick="addToCart('${item.Name}', '${item.Price}', this)">إضافة للسلة</button>
-                </div>
+            container.innerHTML += `
+    <div class="product-card fade-in appear">
+        <img src="${item.Image}" alt="${item.Name}">
+        <h3>${item.Name}</h3>
+        <p class="price">${item.Price} جنيه</p>
+        <p class="notes">${item.Description ? item.Description : ''}</p>
+        <button class="btn btn-gold" style="width:100%" 
+                onclick="addToCart('${item.Name}', '${item.Price}', this)">إضافة للسلة</button>
+    </div>
+`;
             `;
                     `;
                 });
