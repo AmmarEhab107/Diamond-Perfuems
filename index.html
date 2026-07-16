@@ -87,7 +87,7 @@
         footer img { width: 120px; margin-bottom: 20px; }
         .fade-in { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
         .fade-in.appear { opacity: 1; transform: translateY(0); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: black; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: black; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: justify-content: center; align-items: center; font-weight: bold; }
         .btn-gold.added { background: #25d366 !important; border-color: #25d366 !important; color: white !important; }
         @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1.1rem; } .cart-sidebar { width: 100%; } }
     </style>
@@ -182,7 +182,7 @@
     <script>
         let cart = [];
         const apiUrl = 'https://sheetdb.io/api/v1/gazn7tynl1f8b';
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbz-xQy64PB3Gp728Sg6KKutJX4LgTmcWTTCl5jT5a5olnVwsR9ZcipZj06warUyoVa8IQ/exec';
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxcsog6Rz7ahhZVNaMyKpLXIXq1JcttAzgqRE2HU4nyfqEWkoz6UJEdSiqg4TS1r0v-JA/exec';
 
         window.addEventListener('DOMContentLoaded', () => {
             if(localStorage.getItem('custName')) document.getElementById('cust-name').value = localStorage.getItem('custName');
@@ -207,6 +207,7 @@
                     `;
                 });
             });
+
         function addToCart(name, price, btn) {
             cart.push({ name, price });
             const badge = document.getElementById('cart-badge');
@@ -217,31 +218,38 @@
             setTimeout(() => { btn.classList.remove('added'); btn.innerText = "إضافة للسلة"; }, 1500);
             document.getElementById('cart-items').innerHTML += `<p style="padding:10px; border-bottom:1px solid #333;">${name} - ${price} جنيه</p>`;
         }
+
         function sendOrderViaWhatsApp() {
             if(cart.length === 0) { alert("السلة فارغة!"); return; }
             document.getElementById('checkout-modal').style.display = 'flex';
         }
+
         function confirmOrder() {
             let name = document.getElementById('cust-name').value;
             let phone = document.getElementById('cust-phone').value;
             let addr = document.getElementById('cust-address').value;
             if(!name || !phone || !addr) { alert("من فضلك أكمل جميع البيانات!"); return; }
+            
             localStorage.setItem('custName', name);
             localStorage.setItem('custPhone', phone);
             localStorage.setItem('custAddr', addr);
+            
             let total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
             let orderDetails = cart.map(i => i.name).join(', ');
+            
             fetch(scriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({name, phone, address: addr, order: orderDetails, total})
             });
+            
             let msg = `طلب جديد:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالعنوان: ${addr}%0Aالطلبات: ${orderDetails}%0Aالإجمالي: ${total} جنيه`;
             window.open(`https://wa.me/201115489554?text=${msg}`, '_blank');
             document.getElementById('checkout-modal').style.display = 'none';
             alert("تم إرسال طلبك بنجاح!");
         }
+
         document.getElementById('open-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.add('active'));
         document.getElementById('close-cart').addEventListener('click', () => document.getElementById('cart-sidebar').classList.remove('active'));
         window.addEventListener('load', () => { setTimeout(() => { const loader = document.getElementById('loader'); loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 1000); }, 1000); });
