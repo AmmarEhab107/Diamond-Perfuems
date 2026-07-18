@@ -87,7 +87,7 @@
         footer img { width: 120px; margin-bottom: 20px; }
         .fade-in { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
         .fade-in.appear { opacity: 1; transform: translateY(0); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: black; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: justify-content: center; align-items: center; font-weight: bold; }
+        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--gold); color: black; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; display: flex; justify-content: center; align-items: center; font-weight: bold; }
         .btn-gold.added { background: #25d366 !important; border-color: #25d366 !important; color: white !important; }
         @media (max-width: 768px) { .nav-links { display: none; } .hero h1 { font-size: 2.5rem; } .hero p { font-size: 1.1rem; } .cart-sidebar { width: 100%; } }
     </style>
@@ -130,6 +130,17 @@
     </section>
     <section id="shop" class="shop-section">
         <h2 class="section-title fade-in">المجموعة الماسية</h2>
+        <!-- أزرار البحث والفلترة -->
+        <div class="filters" style="text-align:center; margin-bottom:30px;">
+            <input type="text" id="search-bar" placeholder="ابحث عن عطرك المفضل..." 
+                   onkeyup="searchProducts()" 
+                   style="padding:12px; width:250px; border-radius:5px; border:1px solid var(--gold); background:#111; color:white; margin-bottom: 10px;">
+            <br>
+            <button class="btn btn-white" onclick="filterProducts('الكل')">الكل</button>
+            <button class="btn btn-white" onclick="filterProducts('رجالي')">رجالي</button>
+            <button class="btn btn-white" onclick="filterProducts('حريمي')">حريمي</button>
+            <button class="btn btn-white" onclick="filterProducts('للجنسين')">للجنسين</button>
+        </div>
         <div id="shop-container" class="product-grid">
             <p style="text-align:center; width:100%; color:var(--gold);">جاري تحميل عطورنا الماسية...</p>
         </div>
@@ -167,7 +178,6 @@
         <button onclick="sendOrderViaWhatsApp()" class="btn btn-gold" style="width: 100%;">إتمام الطلب</button>
     </div>
     <a href="https://wa.me/201055310466" class="floating-wa" target="_blank"><i class="fab fa-whatsapp"></i></a>
-
     <div id="checkout-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center;">
         <div style="background:#151515; padding:30px; width:90%; max-width:400px; border-radius:15px; text-align:center; border:1px solid var(--gold);">
             <h2 style="color:var(--gold); margin-bottom:20px;">بيانات الطلب</h2>
@@ -178,9 +188,9 @@
             <button onclick="document.getElementById('checkout-modal').style.display='none'" style="background:none; border:none; color:#777; margin-top:15px; cursor:pointer;">إلغاء</button>
         </div>
     </div>
-
     <script>
         let cart = [];
+        let allProducts = [];
         const apiUrl = 'https://sheetdb.io/api/v1/gazn7tynl1f8b';
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbzALueT3xvA36rZWLG3Fg4jpFs6MPZTSZPGBPzn9SviYZnJmkLdfuZmlwtxT3w2SwG5mg/exec';
 
@@ -193,20 +203,40 @@
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById('shop-container');
-                container.innerHTML = ''; 
-                data.forEach(item => {
-                    container.innerHTML += `
-                        <div class="product-card fade-in appear">
-                            <img src="${item.Image}" alt="${item.Name}">
-                            <h3>${item.Name}</h3>
-                            <p class="price">${item.Price} جنيه</p>
-                            <p class="notes">${item.Description || ''}</p>
-                            <button class="btn btn-gold" style="width:100%" onclick="addToCart('${item.Name}', '${item.Price}', this)">إضافة للسلة</button>
-                        </div>
-                    `;
-                });
+                allProducts = data;
+                renderProducts(allProducts);
             });
+
+        function renderProducts(products) {
+            const container = document.getElementById('shop-container');
+            container.innerHTML = ''; 
+            products.forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card fade-in appear">
+                        <img src="${item.Image}" alt="${item.Name}">
+                        <h3>${item.Name}</h3>
+                        <p class="price">${item.Price} جنيه</p>
+                        <p class="notes">${item.Description || ''}</p>
+                        <button class="btn btn-gold" style="width:100%" onclick="addToCart('${item.Name}', '${item.Price}', this)">إضافة للسلة</button>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts(category) {
+            if (category === 'الكل') {
+                renderProducts(allProducts);
+            } else {
+                const filtered = allProducts.filter(item => item.Category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        function searchProducts() {
+            let query = document.getElementById('search-bar').value.toLowerCase();
+            let filtered = allProducts.filter(item => item.Name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
 
         function addToCart(name, price, btn) {
             cart.push({ name, price });
@@ -229,21 +259,17 @@
             let phone = document.getElementById('cust-phone').value;
             let addr = document.getElementById('cust-address').value;
             if(!name || !phone || !addr) { alert("من فضلك أكمل جميع البيانات!"); return; }
-            
             localStorage.setItem('custName', name);
             localStorage.setItem('custPhone', phone);
             localStorage.setItem('custAddr', addr);
-            
             let total = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
             let orderDetails = cart.map(i => i.name).join(', ');
-            
             fetch(scriptUrl, {
                 method: "POST",
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({name, phone, address: addr, order: orderDetails, total})
             });
-            
             let msg = `طلب جديد:%0Aالاسم: ${name}%0Aالهاتف: ${phone}%0Aالعنوان: ${addr}%0Aالطلبات: ${orderDetails}%0Aالإجمالي: ${total} جنيه`;
             window.open(`https://wa.me/201055310466?text=${msg}`, '_blank');
             document.getElementById('checkout-modal').style.display = 'none';
